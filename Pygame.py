@@ -1,6 +1,8 @@
 import pygame as pg
 from sprites import *
+
 import random
+#ha enemy følge etter player, Add hp til enemy, Add waves, add endring i størrelse på skudd om man trykker en knapp
 pg.init() # starter pygame modul
 
 BLACK = (0,0,0)
@@ -9,47 +11,53 @@ RED = (255,0,0)
 GREEN = (0,255,0)
 YELLOW = (255,255,0)
 
-screen = pg.display.set_mode((800,600)) # lager spill vindu, 800x600
+screen = pg.display.set_mode((2560, 1440)) # lager spill vindu, 800x600
 clock = pg.time.Clock()
 
-player = Player() # lager 1 kopi av Player class
-player2 = Player()
-player3 = Player()
+font_cs30 = pg.font.SysFont("Comic Sans", 30)
+font_times40 = pg.font.SysFont("Times New Roman", 40)
 
 all_sprites = pg.sprite.Group()
-all_sprites.add(player) # legg til player i gruppen
-all_sprites.add(player2) # legg til player i gruppen
-all_sprites.add(player3) # legg til player i gruppen
+enemies_group = pg.sprite.Group() 
+player = Player(all_sprites, enemies_group)
+all_sprites.add(player)
 
 
 playing = True
 while playing: # game loop
-    clock.tick(120)
+    clock.tick(12000)
     #print("FPS: ", i)
     for event in pg.event.get():
         if event.type == pg.QUIT: # hvis vi trykker pÃ¥ krysset i spillvinduet
             playing = False
             pg.quit()
-        if event.type == pg.KEYDOWN:
+        if event.type == pg.KEYDOWN: 
             if event.key == pg.K_e:
-                new_player = Player()
-                all_sprites.add(new_player)
-    # spawning av flere players
-    if len(all_sprites) < 100:
-        new_player = Player()
-        all_sprites.add(new_player)
-    if len(all_sprites) < 1:
-        new_kreft = kreft()
-        all_sprites.add(kreft)
+                player = Player(all_sprites)
+                all_sprites.add(player)
 
-   
-    
+
+    if len(enemies_group) < 100|00:
+        new_enemy = Enemy(all_sprites, enemies_group) #lager 1 kopi av fiende
 
     # oppdater alle sprites i all_sprites gruppen
     all_sprites.update()
+
+    hits = pg.sprite.spritecollide(player, enemies_group, True)
+    if hits:
+        player.take_dmg(10)
+        print("Du tok skade")
+       
+        
+
+
+    hp_text = font_times40.render(f"HP:{player.hp}", False, (RED))
 
     # tegn bakgrunn og alle sprites
     screen.fill(YELLOW)
     all_sprites.draw(screen)
 
+    screen.blit(hp_text, (10,10))
+
     pg.display.update()
+    

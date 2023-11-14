@@ -15,7 +15,7 @@ class Player():
         print("update")
     def printStats(self):
         print(self.name,self.hitpoints,self.position)
-    def fight(slef,hitpoints):
+    def fight(self,hitpoints):
         print("You are fighting"+str(health))
         health = health -1
         print("actual health"+str(health))
@@ -23,7 +23,7 @@ class Player():
         #constructor
         def __init__(self,name,weight,age):
             self.name=name
-            self.weihgt=weight
+            self.weight=weight
             self.age=age
         def printStats(self):
             print(self.name,self,weight,self,age)
