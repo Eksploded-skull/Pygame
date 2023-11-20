@@ -19,8 +19,14 @@ font_times40 = pg.font.SysFont("Times New Roman", 40)
 
 all_sprites = pg.sprite.Group()
 enemies_group = pg.sprite.Group() 
+block = pg.sprite.Group()
+block = Block(all_sprites, enemies_group)
 player = Player(all_sprites, enemies_group)
 all_sprites.add(player)
+
+Block(all_sprites, enemies_group)
+
+
 
 
 playing = True
@@ -37,7 +43,7 @@ while playing: # game loop
                 all_sprites.add(player)
 
 
-    if len(enemies_group) < 100|00:
+    if len(enemies_group) < 10000:
         new_enemy = Enemy(all_sprites, enemies_group) #lager 1 kopi av fiende
 
     # oppdater alle sprites i all_sprites gruppen
@@ -47,7 +53,10 @@ while playing: # game loop
     if hits:
         player.take_dmg(10)
         print("Du tok skade")
-       
+    hits = pg.sprite.spritecollide(block, enemies_group, True)
+    if hits:
+        block.take_dmg(100)
+        print("Blokk tok skade")
         
 
 

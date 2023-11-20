@@ -46,6 +46,31 @@ class Enemy(pg.sprite.Sprite):
 class Block(pg.sprite.Sprite):
     def __init__(self, all_sprites, enemies_group):
         pg.sprite.Sprite.__init__(self)
+        self.image = Block_image
+        self.rect = self.image.get_rect()
+        self.image.set_colorkey((255,255,255))
+        self.pos_x = 1200
+        self.pos_y = 600
+        self.enemies_group = enemies_group
+        all_sprites.add(self)
+        self.hp = 100
+    
+    def take_dmg(self, dmg):
+        self.hp-= dmg
+        if self.hp  <= 0:
+            self.kill()
+
+    
+    def update(self):
+        self.rect.x = self.pos_x
+        self.rect.y = self.pos_y
+        hits = pg.sprite.spritecollide(self, self.enemies_group, True)
+
+
+
+
+
+        
         
         
 
@@ -57,8 +82,8 @@ class Player(pg.sprite.Sprite):
         pg.sprite.Sprite.__init__(self)
         self.image = player_image
         self.rect = self.image.get_rect()
-        self.pos_x = 1200
-        self.pos_y = 600
+        self.pos_x = 300
+        self.pos_y = 500
         self.speed = 5
         self.hp = 100
         self.all_sprites = all_sprites
@@ -99,6 +124,7 @@ class Player(pg.sprite.Sprite):
         if keys[pg.K_y]:
             for sprite in (self.enemies_group):
                 sprite.kill()
+        
     
 
 
