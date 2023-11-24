@@ -1,6 +1,11 @@
 import pygame as pg
 import random
 
+STANDING1 = pg.image.load("images/STANDING1.png")
+STANDING2 = pg.image.load("images/STANDING2.png")
+STANDING3 = pg.image.load("images/STANDING3.png")
+
+
 
 #from Pygame import enemies_group
 
@@ -78,6 +83,14 @@ class Block(pg.sprite.Sprite):
 class Player(pg.sprite.Sprite):
     def __init__(self, all_sprites, enemies_group): # denne funksjonen kjører når vi lager player
         pg.sprite.Sprite.__init__(self)
+        self.current_frame = 0
+        self.last_update = 0
+
+        self.standing = True
+        self.running = False
+        self.jumping = False
+        
+        self.standing_frames = [STANDING1, STANDING2, STANDING3]
         self.image = player_image
         self.rect = self.image.get_rect()
         self.pos_x = 300
@@ -100,13 +113,25 @@ class Player(pg.sprite.Sprite):
         self.all_sprites.add(projectile)
 
     def place_block(self):
-        block_projectile = Block(self.all_sprites, self.pos_x,self.pos_y, self.enemies_group)
+        block_projectile = Block(self.all_sprites, self.enemies_group, self.pos_x,self.pos_y)
         print("plasserte block")
         self.all_sprites.add(block_projectile)
-
+    
     def update(self):
+        self.animate()
+        self.rect.center = self.pos
+        self.standing = True
         self.rect.centerx = self.pos_x
         self.rect.centery = self.pos_y
+    def animate(self):
+        now = pg.time.get_ticks()
+
+        if self.standing:
+            if now - self.last_update > 350:
+                self.last_update = now
+                self.current_frame = (self.current_frame + 1)% len(self.standing_frames)
+                self.image = self.standing_frames[self.current_frame]
+                self.rect = self.image.get_rect()
 
 
 
