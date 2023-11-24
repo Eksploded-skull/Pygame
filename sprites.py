@@ -20,8 +20,8 @@ Block_image = pg.transform.scale(Block_image, (30,30))
 class Enemy(pg.sprite.Sprite):
     def __init__(self, all_sprites, enemies_group): # denne funksjonen kjører når vi lager enemy
         pg.sprite.Sprite.__init__(self)
-        self.image = enemy_image
-        self.rect = self.image.get_rect()
+        self.image = enemy_image 
+        self.rect = self.image.get_rect()#at hitboxen til Enemy er imaget
         self.pos_x = 2560
         self.pos_y = random.randint(0,1440)
         self.speed = random.randint(1,10)
@@ -44,13 +44,15 @@ class Enemy(pg.sprite.Sprite):
             self.kill()
         
 class Block(pg.sprite.Sprite):
-    def __init__(self, all_sprites, enemies_group):
+    def __init__(self, all_sprites, enemies_group, x, y):
         pg.sprite.Sprite.__init__(self)
         self.image = Block_image
         self.rect = self.image.get_rect()
         self.image.set_colorkey((255,255,255))
-        self.pos_x = 1200
-        self.pos_y = 600
+        self.pos_x = x
+        self.pos_y = y
+        self.rect.x = self.pos_x
+        self.rect.y = self.pos_y
         self.enemies_group = enemies_group
         all_sprites.add(self)
         self.hp = 100
@@ -64,15 +66,11 @@ class Block(pg.sprite.Sprite):
     def update(self):
         self.rect.x = self.pos_x
         self.rect.y = self.pos_y
+
         hits = pg.sprite.spritecollide(self, self.enemies_group, True)
+        if hits:
+            self.take_dmg(10)
 
-
-
-
-
-        
-        
-        
 
 
 
@@ -95,10 +93,16 @@ class Player(pg.sprite.Sprite):
         self.hp-=dmg
         if self.hp  <= 0:
             self.kill()
+
     def attack(self):
         projectile = Ranged_attack(self.pos_x,self.pos_y, self.enemies_group)
         print("attacked")
         self.all_sprites.add(projectile)
+
+    def place_block(self):
+        block_projectile = Block(self.all_sprites, self.pos_x,self.pos_y, self.enemies_group)
+        print("plasserte block")
+        self.all_sprites.add(block_projectile)
 
     def update(self):
         self.rect.centerx = self.pos_x
@@ -125,6 +129,10 @@ class Player(pg.sprite.Sprite):
             for sprite in (self.enemies_group):
                 sprite.kill()
         
+        elif keys[pg.K_f]:
+            self.place_block()
+            print("Du plasserte en block")
+        
     
 
 
@@ -140,7 +148,6 @@ class Ranged_attack(pg.sprite.Sprite):
         self.image = ranged_image
         self.rect = self.image.get_rect()
         self.image.set_colorkey((255,255,255))
-
         self.pos_x = x
         self.pos_y = y
         self.speed = 10
@@ -155,6 +162,9 @@ class Ranged_attack(pg.sprite.Sprite):
 
         self.pos_x += self.speed
         hits = pg.sprite.spritecollide(self, self.enemies_group, True)
+        if self.pos_x > 3000:
+            self.kill()
+    
         
 
  

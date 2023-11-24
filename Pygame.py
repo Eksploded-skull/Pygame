@@ -20,11 +20,11 @@ font_times40 = pg.font.SysFont("Times New Roman", 40)
 all_sprites = pg.sprite.Group()
 enemies_group = pg.sprite.Group() 
 block = pg.sprite.Group()
-block = Block(all_sprites, enemies_group)
+block = Block(all_sprites, enemies_group, 800, 300)
 player = Player(all_sprites, enemies_group)
 all_sprites.add(player)
 
-Block(all_sprites, enemies_group)
+
 
 
 
@@ -53,14 +53,12 @@ while playing: # game loop
     if hits:
         player.take_dmg(10)
         print("Du tok skade")
-    hits = pg.sprite.spritecollide(block, enemies_group, True)
-    if hits:
-        block.take_dmg(100)
-        print("Blokk tok skade")
         
 
 
     hp_text = font_times40.render(f"HP:{player.hp}", False, (RED))
+
+
 
     # tegn bakgrunn og alle sprites
     screen.fill(YELLOW)
