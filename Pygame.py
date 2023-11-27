@@ -2,6 +2,12 @@ import pygame as pg
 from sprites import *
 
 import random
+# ha enemies som slår på vegger.
+# ha dem prøve å finne en vei inn
+# add health til enemies
+# add turrets
+# gjør som at æ kan snu rundt og skyt
+# sov i timen
 #ha enemy følge etter player, Add hp til enemy, Add waves, add endring i størrelse på skudd om man trykker en knapp
 pg.init() # starter pygame modul
 

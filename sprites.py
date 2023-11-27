@@ -2,8 +2,11 @@ import pygame as pg
 import random
 
 STANDING1 = pg.image.load("images/STANDING1.png")
+STANDING1 = pg.transform.scale(STANDING1, (30,30))
 STANDING2 = pg.image.load("images/STANDING2.png")
+STANDING2 = pg.transform.scale(STANDING2, (30,30))
 STANDING3 = pg.image.load("images/STANDING3.png")
+STANDING3 = pg.transform.scale(STANDING3, (30,30))
 
 
 
@@ -72,9 +75,11 @@ class Block(pg.sprite.Sprite):
         self.rect.x = self.pos_x
         self.rect.y = self.pos_y
 
-        hits = pg.sprite.spritecollide(self, self.enemies_group, True)
+        hits = pg.sprite.spritecollide(self, self.enemies_group, False)
         if hits:
             self.take_dmg(10)
+            for enemy in hits:
+                pass
 
 
 
@@ -119,10 +124,12 @@ class Player(pg.sprite.Sprite):
     
     def update(self):
         self.animate()
-        self.rect.center = self.pos
-        self.standing = True
+    
         self.rect.centerx = self.pos_x
         self.rect.centery = self.pos_y
+
+        self.standing = True
+      
     def animate(self):
         now = pg.time.get_ticks()
 
