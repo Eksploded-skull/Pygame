@@ -3,12 +3,13 @@ from sprites import *
 
 import random
 # ha enemies som slår på vegger.
-# ha dem prøve å finne en vei inn
+# ha dem prøve å finne en vei inn  
 # add health til enemies
-# add turrets
+# add turrets  
 # gjør som at æ kan snu rundt og skyt
 # sov i timen
 #ha enemy følge etter player, Add hp til enemy, Add waves, add endring i størrelse på skudd om man trykker en knapp
+#add flere animations
 pg.init() # starter pygame modul
 
 BLACK = (0,0,0)
@@ -51,7 +52,7 @@ while playing: # game loop
 
     if len(enemies_group) < 10000:
         new_enemy = Enemy(all_sprites, enemies_group) #lager 1 kopi av fiende
-
+   
     # oppdater alle sprites i all_sprites gruppen
     all_sprites.update()
 
@@ -65,7 +66,7 @@ while playing: # game loop
     hp_text = font_times40.render(f"HP:{player.hp}", False, (RED))
 
 
-
+ 
     # tegn bakgrunn og alle sprites
     screen.fill(YELLOW)
     all_sprites.draw(screen)

@@ -1,5 +1,9 @@
 import pygame as pg
 import random
+from pygame import mixer
+
+pg.init()
+
 
 STANDING1 = pg.image.load("images/STANDING1.png")
 STANDING1 = pg.transform.scale(STANDING1, (30,30))
@@ -7,6 +11,9 @@ STANDING2 = pg.image.load("images/STANDING2.png")
 STANDING2 = pg.transform.scale(STANDING2, (30,30))
 STANDING3 = pg.image.load("images/STANDING3.png")
 STANDING3 = pg.transform.scale(STANDING3, (30,30))
+Shooting1 = pg.image.load("images/Shooting1.png")
+Shooting2 = pg.image.load("images\Shooting2.png")
+Shooting3 = pg.image.load("images\Shooting3.png")
 
 
 
@@ -20,9 +27,12 @@ enemy_image = pg.image.load("images/enemy.png")
 enemy_image = pg.transform.scale(enemy_image, (30,30))
 
 ranged_image = pg.image.load("images/ranged_img.png")
-ranged_image = pg.transform.scale(ranged_image, (30,30))
+ranged_image = pg.transform.scale(ranged_image, (50,50))
 Block_image = pg.image.load("images/Block.png")
 Block_image = pg.transform.scale(Block_image, (30,30))
+
+small_attack_sound = pg.mixer.Sound("sound_effects/shooting.mp3")
+small_attack_sound.set_volume(5)
 
 
 class Enemy(pg.sprite.Sprite):
@@ -51,6 +61,8 @@ class Enemy(pg.sprite.Sprite):
         if self.pos_x < 0:
             self.kill()
         
+
+
 class Block(pg.sprite.Sprite):
     def __init__(self, all_sprites, enemies_group, x, y):
         pg.sprite.Sprite.__init__(self)
@@ -91,11 +103,16 @@ class Player(pg.sprite.Sprite):
         self.current_frame = 0
         self.last_update = 0
 
+        self.last_attack = 0
+        self.attack_interval = 500
+
         self.standing = True
         self.running = False
         self.jumping = False
+        self.shooting = False
         
         self.standing_frames = [STANDING1, STANDING2, STANDING3]
+        self.shooting_frames = [Shooting1, Shooting2, Shooting3]
         self.image = player_image
         self.rect = self.image.get_rect()
         self.pos_x = 300
@@ -113,9 +130,18 @@ class Player(pg.sprite.Sprite):
             self.kill()
 
     def attack(self):
-        projectile = Ranged_attack(self.pos_x,self.pos_y, self.enemies_group)
-        print("attacked")
-        self.all_sprites.add(projectile)
+        now = pg.time.get_ticks()
+        if now - self.last_attack > self.attack_interval:
+            self.standing = False
+            self.shooting = True
+            self.last_attack = now
+            print("attacked")
+            projectile = Ranged_attack(self.pos_x,self.pos_y, self.enemies_group)
+            self.all_sprites.add(projectile)
+            pg.mixer.Sound.play(small_attack_sound)
+
+
+
 
     def place_block(self):
         block_projectile = Block(self.all_sprites, self.enemies_group, self.pos_x,self.pos_y)
@@ -171,11 +197,9 @@ class Player(pg.sprite.Sprite):
 
 
 
-
-
-
 class Ranged_attack(pg.sprite.Sprite):
-    def __init__(self, x, y, enemies_group) -> None:
+    def __init__(self, x, y, enemies_group,) -> None:
+        
         pg.sprite.Sprite.__init__(self)
         self.image = ranged_image
         self.rect = self.image.get_rect()
@@ -186,16 +210,26 @@ class Ranged_attack(pg.sprite.Sprite):
         self.enemies_group = enemies_group
         self.rect.x = self.pos_x
         self.rect.y = self.pos_y
+        
+        self.Cash = 0
+        self.hit_enemy = False
+        self.hp = 2
 
     def update(self):
         self.rect.x = self.pos_x
-        self.rect.y = self.pos_y
+        self.rect.y = self.pos_y - 15
         
-
+    
         self.pos_x += self.speed
         hits = pg.sprite.spritecollide(self, self.enemies_group, True)
+
+        if hits:
+            self.Cash += 1
+            print("Du har", self.Cash, "cash")
+            self.hit_enemy = True
         if self.pos_x > 3000:
             self.kill()
+
     
         
 
