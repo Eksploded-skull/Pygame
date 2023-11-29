@@ -61,6 +61,7 @@ while playing: # game loop
     if hits:
         player.take_dmg(10)
         print("Du tok skade")
+   
         
 
 

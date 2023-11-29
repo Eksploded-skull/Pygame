@@ -47,8 +47,8 @@ class Enemy(pg.sprite.Sprite):
         self.direction = random.choice(["left","right", "up", "down"])
         print(self.direction)
         
-        #self.pos_x = 2560
-        #self.pos_y = random.randint(0,1440)
+        self.pos_x = 2560
+        self.pos_y = random.randint(0,1440)
 
 
         self.speed = random.randint(1,10)
@@ -75,11 +75,14 @@ class Enemy(pg.sprite.Sprite):
         if self.direction == "up":
             self.pos_x = random.randint(0, 2560)
             self.pos_y = 1440
+            self.pos_y -= self.speed
         if self.direction == "down":
-            
+            self.pos_x = random.randint(0, 2560)
+            self.pos_y = 0
+            self.pos_y += self.speed
         self.rect.centerx = self.pos_x
         self.rect.centery = self.pos_y
-        self.pos_x -= self.speed
+
 
         if self.pos_x < 0:
             self.kill()
