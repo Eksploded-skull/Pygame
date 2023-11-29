@@ -10,6 +10,7 @@ import random
 # sov i timen
 #ha enemy følge etter player, Add hp til enemy, Add waves, add endring i størrelse på skudd om man trykker en knapp
 #add flere animations
+#wall breakers
 pg.init() # starter pygame modul
 
 BLACK = (0,0,0)
@@ -64,7 +65,7 @@ while playing: # game loop
 
 
     hp_text = font_times40.render(f"HP:{player.hp}", False, (RED))
-
+    cash_text = font_times40.render(f"Cash:{player.cash}", False, ((RED)))
 
  
     # tegn bakgrunn og alle sprites
@@ -72,6 +73,7 @@ while playing: # game loop
     all_sprites.draw(screen)
 
     screen.blit(hp_text, (10,10))
+    screen.blit(cash_text, (10,50))
 
     pg.display.update()
     

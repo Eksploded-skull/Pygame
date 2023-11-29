@@ -40,11 +40,18 @@ class Enemy(pg.sprite.Sprite):
         pg.sprite.Sprite.__init__(self)
         self.image = enemy_image 
         self.rect = self.image.get_rect()#at hitboxen til Enemy er imaget
-        self.pos_x = 2560
-        self.pos_y = random.randint(0,1440)
-        self.speed = random.randint(1,10)
+        
         self.all_sprites = all_sprites
         self.enemies_group = enemies_group
+
+        self.direction = random.choice(["left","right", "up", "down"])
+        print(self.direction)
+        
+        self.pos_x = 2560
+        self.pos_y = random.randint(0,1440)
+
+
+        self.speed = random.randint(1,10)
 
         self.all_sprites.add(self)
         self.enemies_group.add(self)
@@ -52,14 +59,25 @@ class Enemy(pg.sprite.Sprite):
         self.rect.centerx = self.pos_x
         self.rect.centery = self.pos_y
         enemy_hp = 100
+
+        
         
     def update(self):
+        if self.direction == "right":
+            self.pos_x = 2560
+            self.pos_y = random.randint(0,1440)
+
+        if self.direction == "left":
+            self.pos_x = 0
+            self.pos_y = random.randint(0,1440)
+            
         self.rect.centerx = self.pos_x
         self.rect.centery = self.pos_y
         self.pos_x -= self.speed
 
         if self.pos_x < 0:
             self.kill()
+
         
 
 
@@ -121,7 +139,7 @@ class Player(pg.sprite.Sprite):
         self.hp = 100
         self.all_sprites = all_sprites
         self.enemies_group = enemies_group
-
+        self.cash = 0
 
 
     def take_dmg(self, dmg):
@@ -136,17 +154,20 @@ class Player(pg.sprite.Sprite):
             self.shooting = True
             self.last_attack = now
             print("attacked")
-            projectile = Ranged_attack(self.pos_x,self.pos_y, self.enemies_group)
+            projectile = Ranged_attack(self.pos_x,self.pos_y, self.enemies_group, self)
             self.all_sprites.add(projectile)
             pg.mixer.Sound.play(small_attack_sound)
 
 
 
 
+
     def place_block(self):
-        block_projectile = Block(self.all_sprites, self.enemies_group, self.pos_x,self.pos_y)
-        print("plasserte block")
-        self.all_sprites.add(block_projectile)
+        if self.cash > 100:
+            self.cash -= 100
+            block_projectile = Block(self.all_sprites, self.enemies_group, self.pos_x,self.pos_y)
+            print("plasserte block")
+            self.all_sprites.add(block_projectile)
     
     def update(self):
         self.animate()
@@ -184,8 +205,10 @@ class Player(pg.sprite.Sprite):
             print("You attacked")
         
         if keys[pg.K_y]:
-            for sprite in (self.enemies_group):
-                sprite.kill()
+            if self.cash > 100:
+                self.cash -=100
+                for sprite in (self.enemies_group):
+                    sprite.kill()
         
         elif keys[pg.K_f]:
             self.place_block()
@@ -198,7 +221,7 @@ class Player(pg.sprite.Sprite):
 
 
 class Ranged_attack(pg.sprite.Sprite):
-    def __init__(self, x, y, enemies_group,) -> None:
+    def __init__(self, x, y, enemies_group, player, speed_x=0, speed_y=0) -> None:
         
         pg.sprite.Sprite.__init__(self)
         self.image = ranged_image
@@ -210,27 +233,27 @@ class Ranged_attack(pg.sprite.Sprite):
         self.enemies_group = enemies_group
         self.rect.x = self.pos_x
         self.rect.y = self.pos_y
+        self.player = player 
         
-        self.Cash = 0
         self.hit_enemy = False
         self.hp = 2
+        projectile_hp = 99
+        self.projectile_hp = projectile_hp
 
     def update(self):
         self.rect.x = self.pos_x
         self.rect.y = self.pos_y - 15
         
-    
+        self.player
         self.pos_x += self.speed
         hits = pg.sprite.spritecollide(self, self.enemies_group, True)
 
         if hits:
-            self.Cash += 1
-            print("Du har", self.Cash, "cash")
+            self.player.cash += 1
+            print("Du har", self.player.cash, "cash")
             self.hit_enemy = True
+            self.projectile_hp -= 33
         if self.pos_x > 3000:
             self.kill()
-
-    
-        
-
- 
+        if self.projectile_hp <= 0:
+            self.kill()
