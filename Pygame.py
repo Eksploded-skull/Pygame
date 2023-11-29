@@ -19,7 +19,7 @@ RED = (255,0,0)
 GREEN = (0,255,0)
 YELLOW = (255,255,0)
 
-screen = pg.display.set_mode((2560, 1440)) # lager spill vindu, 800x600
+screen = pg.display.set_mode((1280, 720)) # lager spill vindu, 800x600
 clock = pg.time.Clock()
 
 font_cs30 = pg.font.SysFont("Comic Sans", 30)
@@ -61,8 +61,8 @@ while playing: # game loop
     if hits:
         player.take_dmg(10)
         print("Du tok skade")
-   
-        
+
+
 
 
     hp_text = font_times40.render(f"HP:{player.hp}", False, (RED))
