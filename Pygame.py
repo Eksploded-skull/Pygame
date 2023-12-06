@@ -37,6 +37,7 @@ all_sprites.add(player)
 
 
 
+
 playing = True
 while playing: # game loop
     clock.tick(12000)
@@ -72,7 +73,7 @@ while playing: # game loop
     screen.fill(YELLOW)
     all_sprites.draw(screen)
 
-    screen.blit(hp_text, (10,10))
+    screen.blit(hp_text, (10,10))                                 
     screen.blit(cash_text, (10,50))
 
     pg.display.update()

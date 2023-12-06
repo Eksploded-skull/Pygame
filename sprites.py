@@ -36,7 +36,7 @@ small_attack_sound.set_volume(5)
 
 
 class Enemy(pg.sprite.Sprite):
-    def __init__(self, all_sprites, enemies_group): # denne funksjonen kjører når vi lager enemy
+    def __init__(self, all_sprites, enemies_group, ): # denne funksjonen kjører når vi lager enemy
         pg.sprite.Sprite.__init__(self)
         self.image = enemy_image 
         self.rect = self.image.get_rect()#at hitboxen til Enemy er imaget
@@ -44,14 +44,21 @@ class Enemy(pg.sprite.Sprite):
         self.all_sprites = all_sprites
         self.enemies_group = enemies_group
 
+        self.speed = random.randint(1,10)
         self.direction = random.choice(["left","right", "up", "down"])
         print(self.direction)
-        
-        self.pos_x = 2560
-        self.pos_y = random.randint(0,1440)
 
 
-        self.speed = random.randint(1,10)
+
+        if self.direction == "left":
+            self.pos_x = 0
+            self.pos_y = random.randint(0,1440)
+            self.pos_x += self.speed
+        else:
+                self.pos_x = 2560
+                self.pos_y = random.randint(0,1440)
+            
+
 
         self.all_sprites.add(self)
         self.enemies_group.add(self)
@@ -63,19 +70,16 @@ class Enemy(pg.sprite.Sprite):
         
         
     def update(self):
-        if self.direction == "right":
-            self.pos_x = 2560
-            self.pos_y = random.randint(0,1440)
-
-        if self.direction == "left":
-            self.pos_x = 0
-            self.pos_y = random.randint(0,1440)
+        if self.pos_x < 400:
+            self.pos_x += self.speed
             
         self.rect.centerx = self.pos_x
         self.rect.centery = self.pos_y
+        if self.direction == "left":
+            self.pos_x += self.speed
         self.pos_x -= self.speed
 
-        if self.pos_x < 0:
+        if self.pos_x < -100:
             self.kill()
 
         
