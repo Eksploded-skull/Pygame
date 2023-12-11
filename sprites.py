@@ -70,8 +70,7 @@ class Enemy(pg.sprite.Sprite):
         
         
     def update(self):
-        if self.pos_x < 400:
-            self.pos_x += self.speed
+
             
         self.rect.centerx = self.pos_x
         self.rect.centery = self.pos_y
