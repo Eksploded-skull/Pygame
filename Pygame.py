@@ -53,7 +53,7 @@ while playing: # game loop
 
 
     if len(enemies_group) < 10000:
-        new_enemy = Enemy(all_sprites, enemies_group) #lager 1 kopi av fiende
+        new_enemy = Enemy(all_sprites, enemies_group) #lager 1 kopi a v fiende
    
     # oppdater alle sprites i all_sprites gruppen
     all_sprites.update()
