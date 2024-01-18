@@ -36,7 +36,7 @@ small_attack_sound.set_volume(5)
 
 
 class Enemy(pg.sprite.Sprite):
-    def __init__(self, all_sprites, enemies_group, block ): # denne funksjonen kjører når vi lager enemy
+    def __init__(self, all_sprites, enemies_group,   ): # denne funksjonen kjører når vi lager enemy
         pg.sprite.Sprite.__init__(self)
         self.image = enemy_image 
         self.rect = self.image.get_rect()#at hitboxen til Enemy er imaget
@@ -47,6 +47,7 @@ class Enemy(pg.sprite.Sprite):
         self.speed = random.randint(1,10)
         self.direction = random.choice(["left","right", "up", "down"])
         print(self.direction)
+        #self.block = block
 
 
 
@@ -65,22 +66,30 @@ class Enemy(pg.sprite.Sprite):
 
         self.rect.centerx = self.pos_x
         self.rect.centery = self.pos_y
-        enemy_hp = 100
+        #self.enemy_hp = enemy_hp
+        #enemy_hp = 100
+
 
         
         
     def update(self):
 
-            
+        #self.enemy_hp = 100
         self.rect.centerx = self.pos_x
         self.rect.centery = self.pos_y
         if self.direction == "left":
             self.pos_x += self.speed
         self.pos_x -= self.speed
+        #hits = pg.sprite.spritecollide(self, self.enemies_group, self.block, False)
+        #if hits:
+        #    self.enemy_hp -= 10
+        #    self.speed == 0
 
         if self.pos_x < -100:
             self.kill()
-        hits = pg.sprite.spritecollide(self, self.enemies_group, block False)
+       # if self.enemy_hp <= 0:
+        #    self.kill()
+        
     
 
         
@@ -112,9 +121,7 @@ class Block(pg.sprite.Sprite):
 
         hits = pg.sprite.spritecollide(self, self.enemies_group, False)
         if hits:
-            self.take_dmg(10)
-            for enemy in hits:
-                pass
+            self.kill()
 
 
 
