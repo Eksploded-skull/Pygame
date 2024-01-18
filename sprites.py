@@ -36,7 +36,7 @@ small_attack_sound.set_volume(5)
 
 
 class Enemy(pg.sprite.Sprite):
-    def __init__(self, all_sprites, enemies_group, ): # denne funksjonen kjører når vi lager enemy
+    def __init__(self, all_sprites, enemies_group, block ): # denne funksjonen kjører når vi lager enemy
         pg.sprite.Sprite.__init__(self)
         self.image = enemy_image 
         self.rect = self.image.get_rect()#at hitboxen til Enemy er imaget
@@ -80,6 +80,8 @@ class Enemy(pg.sprite.Sprite):
 
         if self.pos_x < -100:
             self.kill()
+        hits = pg.sprite.spritecollide(self, self.enemies_group, block False)
+    
 
         
 
